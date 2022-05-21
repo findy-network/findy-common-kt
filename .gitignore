@@ -1,0 +1,14 @@
+.gradle/
+gradle/
+gradlew
+gradlew.bat
+
+.idea/
+.DS_Store
+build/
+*.iml
+/local.properties
+bin/
+
+.vscode
+.envrc
