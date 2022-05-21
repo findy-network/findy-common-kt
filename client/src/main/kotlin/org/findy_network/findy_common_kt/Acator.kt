@@ -8,7 +8,7 @@ interface Executor {
     fun run(command: String): String?
 }
 
-class Acator(val authUrl: String, val authOrigin: String, val userName: String, val seed: String, val key: String, val exec: Executor) {
+class Acator(val authUrl: String, val authOrigin: String, val userName: String, val seed: String, val key: String, val exec: Executor = Exec()) {
 
     val fcliBin = "findy-agent-cli"
 

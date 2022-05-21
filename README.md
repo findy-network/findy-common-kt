@@ -1,5 +1,7 @@
 # findy-common-kt
 
+[![test](https://github.com/findy-network/findy-common-kt/actions/workflows/test.yml/badge.svg)](https://github.com/findy-network/findy-common-kt/actions/workflows/test.yml)
+
 ## Setup env
 
 1. Setup gradle
@@ -18,4 +20,10 @@
 
     ```bash
     ./gradlew checkLicense
+    ```
+
+1. Run sample
+
+    ```bash
+    ./gradlew :sample:Sample
     ```
