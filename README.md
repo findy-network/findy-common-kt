@@ -4,6 +4,18 @@
 
 1. Setup gradle
 
-```
-./tools/setup-gradle.sh
-```
+    ```bash
+    ./tools/setup-gradle.sh
+    ```
+
+1. Run tests
+
+    ```bash
+    ./gradlew check
+    ```
+
+1. Check licenses
+
+    ```bash
+    ./gradlew checkLicense
+    ```
