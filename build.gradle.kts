@@ -21,3 +21,4 @@ allprojects {
 licenseReport {
     this.allowedLicensesFile = File("$projectDir/config/allowed-licenses.json")
 }
+
