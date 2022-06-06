@@ -4,9 +4,9 @@ import io.grpc.CallCredentials
 import io.grpc.CallCredentials.*
 import io.grpc.ManagedChannel
 import io.grpc.Metadata
-import java.io.Closeable
+import java.util.UUID
 import java.util.concurrent.Executor
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.flow.Flow
 import org.findy_network.findy_common_kt.AgentServiceGrpcKt.AgentServiceCoroutineStub
 
 class Creds(val token: String) : CallCredentials() {
@@ -26,19 +26,18 @@ class Creds(val token: String) : CallCredentials() {
   public override fun thisUsesUnstableApi() {}
 }
 
-class AgentClient(private val channel: ManagedChannel, private val token: String) : Closeable {
+class AgentClient(private val channel: ManagedChannel, private val token: String) {
   private val stub: AgentServiceCoroutineStub =
       AgentServiceCoroutineStub(channel).withCallCredentials(Creds(token = token))
 
   suspend fun createInvitation(label: String): Invitation {
     val response = stub.createInvitation(InvitationBase.newBuilder().setLabel(label).build())
 
-    println("Received from Agency:\n$response")
-
     return response
   }
 
-  override fun close() {
-    channel.shutdown().awaitTermination(5, TimeUnit.SECONDS)
+  suspend fun listen(): Flow<AgentStatus> {
+    val uuid: String = UUID.randomUUID().toString()
+    return stub.listen(ClientID.newBuilder().setID(uuid).build())
   }
 }

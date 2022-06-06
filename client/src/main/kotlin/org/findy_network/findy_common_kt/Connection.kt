@@ -4,7 +4,9 @@ import io.grpc.Grpc
 import io.grpc.ManagedChannel
 import io.grpc.ManagedChannelBuilder
 import io.grpc.TlsChannelCredentials
+import java.io.Closeable
 import java.io.File
+import java.util.concurrent.TimeUnit
 
 class Connection(
     val authUrl: String,
@@ -15,8 +17,10 @@ class Connection(
     val server: String,
     val port: Int,
     val certFolderPath: String? = null,
-) {
+) : Closeable {
+  val channel: ManagedChannel
   val agentClient: AgentClient
+  val protocolClient: ProtocolClient
 
   override fun toString(): String {
     return "Connection(authUrl='$authUrl', authOrigin='$authOrigin', userName='$userName', seed='$seed', " +
@@ -47,11 +51,12 @@ class Connection(
             authUrl = authUrl, authOrigin = authOrigin, userName = userName, seed = seed, key = key)
     val token = acator.login()
 
-    val channel =
+    channel =
         if (certFolderPath != null) this.getTLSChannelForCertPath()
         else ManagedChannelBuilder.forAddress(server, port).useTransportSecurity().build()
 
     this.agentClient = AgentClient(channel, token)
+    this.protocolClient = ProtocolClient(channel, token)
   }
 
   fun getTLSChannelForCertPath(): ManagedChannel {
@@ -67,5 +72,9 @@ class Connection(
             .build()
 
     return channel
+  }
+
+  override fun close() {
+    channel.shutdown().awaitTermination(5, TimeUnit.SECONDS)
   }
 }
