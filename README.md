@@ -33,3 +33,8 @@
         ```
 
     1. Sample will print connection invitation. When another aries agent connects with the invitation, sample sends greeting through basic message protocol.
+
+1. Publish libraries to local maven repository
+        ```bash
+         ./gradlew publishToMavenLocal
+         ```

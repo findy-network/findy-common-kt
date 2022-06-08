@@ -24,6 +24,7 @@ dependencies {
 
 java {
     sourceCompatibility = JavaVersion.VERSION_1_8
+    withSourcesJar()
 }
 
 sourceSets {
@@ -50,6 +51,20 @@ protobuf {
             it.plugins {
                 id("grpc")
                 id("grpckt")
+            }
+        }
+    }
+}
+
+publishing {
+    publications {
+        named<MavenPublication>("maven") {
+            from(components["java"])
+
+            pom {
+                name.set("Findy Agency gRPC Kotlin Stub")
+                artifactId = "findy-common-kt-stub"
+                description.set("Kotlin-based stubs for gRPC services")
             }
         }
     }
