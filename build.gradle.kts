@@ -20,7 +20,7 @@ allprojects {
 }
 
 group = "org.findy_network"
-version = "0.0.1"
+version = "0.0.6"
 
 subprojects {
 
@@ -31,6 +31,18 @@ subprojects {
    group = rootProject.group
    version = rootProject.version
 
+    configure<PublishingExtension> {
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/findy-network/findy-common-kt")
+                credentials {
+                    username = project.findProperty("gpr.user") as String? ?: System.getenv("USERNAME")
+                    password = project.findProperty("gpr.key") as String? ?: System.getenv("TOKEN")
+                }
+            }
+        }
+    }
     extensions.getByType<PublishingExtension>().publications {
         create<MavenPublication>("maven") {
             pom {
@@ -59,7 +71,6 @@ subprojects {
             }
         }
     }
-
 }
 
 licenseReport {
