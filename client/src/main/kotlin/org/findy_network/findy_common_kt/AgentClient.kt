@@ -31,9 +31,20 @@ class AgentClient(private val channel: ManagedChannel, private val token: String
       AgentServiceCoroutineStub(channel).withCallCredentials(Creds(token = token))
 
   suspend fun createInvitation(label: String): Invitation {
-    val response = stub.createInvitation(InvitationBase.newBuilder().setLabel(label).build())
+    return stub.createInvitation(InvitationBase.newBuilder().setLabel(label).build())
+  }
 
-    return response
+  suspend fun createSchema(name: String, attributes: List<String>, version: String): Schema {
+    return stub.createSchema(
+        SchemaCreate.newBuilder()
+            .setName(name)
+            .addAllAttributes(attributes)
+            .setVersion(version)
+            .build())
+  }
+
+  suspend fun createCredDef(schemaId: String): CredDef {
+    return stub.createCredDef(CredDefCreate.newBuilder().setSchemaID(schemaId).build())
   }
 
   suspend fun listen(): Flow<AgentStatus> {
