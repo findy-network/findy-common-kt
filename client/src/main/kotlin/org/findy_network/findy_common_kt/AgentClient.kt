@@ -30,6 +30,16 @@ class AgentClient(private val channel: ManagedChannel, private val token: String
   private val stub: AgentServiceCoroutineStub =
       AgentServiceCoroutineStub(channel).withCallCredentials(Creds(token = token))
 
+  suspend fun useAutoAccept() {
+    stub.enter(
+        ModeCmd.newBuilder()
+            .setAcceptMode(
+                ModeCmd.AcceptModeCmd.newBuilder()
+                    .setMode(ModeCmd.AcceptModeCmd.Mode.AUTO_ACCEPT)
+                    .build())
+            .build())
+  }
+
   suspend fun createInvitation(label: String): Invitation {
     return stub.createInvitation(InvitationBase.newBuilder().setLabel(label).build())
   }
