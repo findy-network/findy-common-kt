@@ -33,6 +33,8 @@ class AgentClient(private val channel: ManagedChannel, private val token: String
   suspend fun useAutoAccept() {
     stub.enter(
         ModeCmd.newBuilder()
+            .setTypeID(ModeCmd.CmdType.ACCEPT_MODE)
+            .setIsInput(true)
             .setAcceptMode(
                 ModeCmd.AcceptModeCmd.newBuilder()
                     .setMode(ModeCmd.AcceptModeCmd.Mode.AUTO_ACCEPT)
@@ -53,8 +55,8 @@ class AgentClient(private val channel: ManagedChannel, private val token: String
             .build())
   }
 
-  suspend fun createCredDef(schemaId: String): CredDef {
-    return stub.createCredDef(CredDefCreate.newBuilder().setSchemaID(schemaId).build())
+  suspend fun createCredDef(schemaId: String, tag: String): CredDef {
+    return stub.createCredDef(CredDefCreate.newBuilder().setSchemaID(schemaId).setTag(tag).build())
   }
 
   suspend fun listen(): Flow<AgentStatus> {
