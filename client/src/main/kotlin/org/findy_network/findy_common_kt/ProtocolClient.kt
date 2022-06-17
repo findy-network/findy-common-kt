@@ -10,6 +10,10 @@ class ProtocolClient(private val channel: ManagedChannel, private val token: Str
   private val stub: ProtocolServiceCoroutineStub =
       ProtocolServiceCoroutineStub(channel).withCallCredentials(Creds(token = token))
 
+  suspend fun status(id: String): ProtocolStatus {
+    return stub.status(ProtocolID.newBuilder().setID(id).build())
+  }
+
   suspend fun connect(invitationURL: String, label: String): ProtocolID {
     return stub.start(
         Protocol.newBuilder()
