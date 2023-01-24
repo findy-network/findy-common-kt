@@ -1,8 +1,8 @@
 name: publish
 on:
   push:
-    # branches:
-    #   - "master"
+    branches:
+      - "master"
 jobs:
   # TODO: use releaser action and take dev branch in use
   publish:
