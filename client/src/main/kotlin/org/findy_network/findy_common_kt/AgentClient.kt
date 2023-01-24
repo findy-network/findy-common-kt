@@ -42,25 +42,49 @@ class AgentClient(private val channel: ManagedChannel, private val token: String
             .build())
   }
 
-  suspend fun createInvitation(label: String): Invitation {
-    return stub.createInvitation(InvitationBase.newBuilder().setLabel(label).build())
-  }
+  suspend fun createInvitation(label: String): Invitation =
+    stub.createInvitation(
+      InvitationBase.newBuilder()
+        .setLabel(label)
+        .build()
+    )
 
-  suspend fun createSchema(name: String, attributes: List<String>, version: String): Schema {
-    return stub.createSchema(
-        SchemaCreate.newBuilder()
-            .setName(name)
-            .addAllAttributes(attributes)
-            .setVersion(version)
-            .build())
-  }
+  suspend fun createSchema(name: String, attributes: List<String>, version: String): Schema =
+    stub.createSchema(
+      SchemaCreate.newBuilder()
+        .setName(name)
+        .addAllAttributes(attributes)
+        .setVersion(version)
+        .build()
+    )
 
-  suspend fun createCredDef(schemaId: String, tag: String): CredDef {
-    return stub.createCredDef(CredDefCreate.newBuilder().setSchemaID(schemaId).setTag(tag).build())
-  }
+  suspend fun getSchema(id: String): SchemaData =
+    stub.getSchema(
+      Schema.newBuilder()
+        .setID(id)
+        .build()
+    )
 
-  suspend fun listen(): Flow<AgentStatus> {
-    val uuid: String = UUID.randomUUID().toString()
-    return stub.listen(ClientID.newBuilder().setID(uuid).build())
-  }
+  suspend fun createCredDef(schemaId: String, tag: String): CredDef =
+    stub.createCredDef(
+      CredDefCreate.newBuilder()
+        .setSchemaID(schemaId)
+        .setTag(tag)
+        .build()
+    )
+
+  suspend fun getCredDef(id: String): CredDefData =
+    stub.getCredDef(
+      CredDef.newBuilder()
+        .setID(id)
+        .build()
+    )
+
+    suspend fun listen(): Flow<AgentStatus> =
+    stub.listen(
+      ClientID.newBuilder()
+        .setID(UUID.randomUUID()
+        .toString())
+        .build()
+      )
 }
