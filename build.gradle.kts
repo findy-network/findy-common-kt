@@ -20,7 +20,7 @@ allprojects {
 }
 
 group = "org.findy_network"
-version = "0.0.9"
+version = System.getenv("VERSION") ?: "0.0.1"
 
 subprojects {
 

@@ -1,0 +1,27 @@
+name: publish
+on:
+  push:
+    branches:
+      - "master"
+jobs:
+  # TODO: use releaser action and take dev branch in use
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          java-version: 8
+          distribution: "zulu"
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: 7.4.2
+      - run: ./tools/version.sh
+      - run: echo "VERSION=$(cat ./VERSION)" >> $GITHUB_ENV
+        env:
+          BRANCH_NAME: ${{ env.GITHUB_REF_NAME }}
+      - run: gradle publish
+        env:
+          USERNAME: ${{ github.repository_owner }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
