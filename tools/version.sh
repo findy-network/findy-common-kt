@@ -20,4 +20,4 @@ echo "Attempt to release version $NEW_VERSION"
 echo $NEW_VERSION >VERSION
 git add VERSION
 git commit -a -m "Increase version to v$NEW_VERSION."
-git push origin master
+git push origin $BRANCH_NAME

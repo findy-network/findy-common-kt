@@ -18,6 +18,8 @@ jobs:
           gradle-version: 7.4.2
       - run: ./tools/version.sh
       - run: echo "VERSION=$(cat ./VERSION)" >> $GITHUB_ENV
+        env:
+          BRANCH_NAME: ${{ env.GITHUB_REF_NAME }}
       - run: gradle publish
         env:
           USERNAME: ${{ github.repository_owner }}
