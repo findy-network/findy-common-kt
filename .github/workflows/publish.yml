@@ -1,0 +1,20 @@
+name: publish
+on:
+  push:
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-java@v2
+        with:
+          java-version: 8
+          distribution: "zulu"
+      - uses: gradle/gradle-build-action@v2
+        with:
+          gradle-version: 7.4.2
+      - run: gradle publish
+        env:
+          USERNAME: ${{ github.repository_owner }}
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
