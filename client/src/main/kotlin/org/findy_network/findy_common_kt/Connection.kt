@@ -64,7 +64,7 @@ class Connection(
         TlsChannelCredentials.newBuilder().trustManager(File("$certFolderPath/server/server.crt"))
 
     tlsBuilder.keyManager(
-        File("$certFolderPath/client/client.crt"), File("$certFolderPath/client/client.key"))
+        File("$certFolderPath/client/client.crt"), File("$certFolderPath/client/client-pkcs8.key"))
 
     val channel =
         Grpc.newChannelBuilderForAddress(server, port, tlsBuilder.build())
