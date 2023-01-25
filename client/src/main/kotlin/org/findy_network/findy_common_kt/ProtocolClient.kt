@@ -100,7 +100,7 @@ class ProtocolClient(private val channel: ManagedChannel, private val token: Str
     }
 
     suspend fun resumeProofRequest(protocolId: String, accept: Boolean): ProtocolID {
-        return stub.start(
+        return stub.resume(
                 ProtocolState.newBuilder()
                         .setProtocolID(
                                 ProtocolID.newBuilder()
