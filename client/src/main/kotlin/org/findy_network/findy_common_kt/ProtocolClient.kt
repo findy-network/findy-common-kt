@@ -22,8 +22,10 @@ class ProtocolClient(private val channel: ManagedChannel, private val token: Str
             .setDIDExchange(
                 Protocol.DIDExchangeMsg.newBuilder()
                     .setInvitationJSON(invitationURL)
-                    .setLabel(label))
-            .build())
+                    .setLabel(label)
+            )
+            .build()
+    )
   }
 
   suspend fun sendMessage(connectionId: String, message: String): ProtocolID {
@@ -33,7 +35,8 @@ class ProtocolClient(private val channel: ManagedChannel, private val token: Str
             .setRole(Protocol.Role.INITIATOR)
             .setConnectionID(connectionId)
             .setBasicMessage(Protocol.BasicMessageMsg.newBuilder().setContent(message))
-            .build())
+            .build()
+    )
   }
 
   suspend fun sendCredentialOffer(
@@ -60,8 +63,11 @@ class ProtocolClient(private val channel: ManagedChannel, private val token: Str
                     .setAttributes(
                         Protocol.IssuingAttributes.newBuilder()
                             .addAllAttributes(credAttributes)
-                            .build()))
-            .build())
+                            .build()
+                    )
+            )
+            .build()
+    )
   }
 
   suspend fun sendProofRequest(
@@ -81,7 +87,24 @@ class ProtocolClient(private val channel: ManagedChannel, private val token: Str
             .setPresentProof(
                 Protocol.PresentProofMsg.newBuilder()
                     .setAttributes(
-                        Protocol.Proof.newBuilder().addAllAttributes(proofAttributes).build()))
-            .build())
+                        Protocol.Proof.newBuilder().addAllAttributes(proofAttributes).build()
+                    )
+            )
+            .build()
+    )
+  }
+
+  suspend fun resumeProofRequest(protocolId: String, accept: Boolean): ProtocolID {
+    return stub.resume(
+        ProtocolState.newBuilder()
+            .setProtocolID(
+                ProtocolID.newBuilder()
+                    .setTypeID(Protocol.Type.PRESENT_PROOF)
+                    .setRole(Protocol.Role.RESUMER)
+                    .setID(protocolId)
+            )
+            .setState(if (accept) ProtocolState.State.ACK else ProtocolState.State.NACK)
+            .build()
+    )
   }
 }
