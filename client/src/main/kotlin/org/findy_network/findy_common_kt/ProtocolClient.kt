@@ -108,7 +108,7 @@ class ProtocolClient(private val channel: ManagedChannel, private val token: Str
                                         .setRole(Protocol.Role.RESUMER)
                                         .setID(protocolId)
                         )
-                        .setState(if (accept) ProtocolState.ACK else ProtocolState.NACK)
+                        .setState(if (accept) ProtocolState.State.ACK else ProtocolState.State.NACK)
                         .build()
         )
     }
